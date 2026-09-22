@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>إدارة المعلمين - دار التلوانى</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .teachers-page {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 25px;
+        }
+
+        .teachers-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .teachers-title h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .teachers-title p {
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        .add-teacher-btn {
+            display: inline-block;
+            padding: 13px 22px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            background: #c9a227;
+            color: #111;
+        }
+
+        .teachers-count {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(201, 162, 39, 0.4);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+        }
+
+        .teachers-count span {
+            font-size: 28px;
+            font-weight: bold;
+            color: #c9a227;
+        }
+
+        .teachers-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 20px;
+        }
+
+        .teacher-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(201, 162, 39, 0.35);
+            border-radius: 16px;
+            padding: 22px;
+            transition: 0.3s;
+        }
+
+        .teacher-card:hover {
+            transform: translateY(-4px);
+            border-color: #c9a227;
+        }
+
+        .teacher-icon {
+            width: 55px;
+            height: 55px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                rgba(201, 162, 39, 0.15);
+
+            font-size: 25px;
+
+            margin-bottom: 15px;
+        }
+
+        .teacher-card h3 {
+            margin: 0 0 15px;
+            font-size: 21px;
+        }
+
+        .teacher-info {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .teacher-info strong {
+            color: #c9a227;
+        }
+
+        .teacher-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .teacher-actions button {
+            flex: 1;
+            padding: 9px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-dashboard {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+
+            .teachers-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .add-teacher-btn {
+                text-align: center;
+            }
+
+            .teachers-page {
+                margin: 20px auto;
+                padding: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<main class="teachers-page">
+
+
+    <div class="teachers-header">
+
+        <div class="teachers-title">
+
+            <h1>👨‍🏫 إدارة المعلمين</h1>
+
+            <p>
+                متابعة وإدارة معلمي دار التلوانى
+            </p>
+
+        </div>
+
+
+        <a href="{{ url_for('add_teacher') }}"
+           class="add-teacher-btn">
+
+            ➕ إضافة معلم
+
+        </a>
+
+    </div>
+
+
+    <div class="teachers-count">
+
+        <span id="teachersCount">0</span>
+
+        <span style="font-size: 16px; color: inherit;">
+            معلم مسجل
+        </span>
+
+    </div>
+
+
+    <div id="teachersList"
+         class="teachers-grid">
+
+        جاري تحميل بيانات المعلمين...
+
+    </div>
+
+
+    <a href="{{ url_for('admin_dashboard') }}"
+       class="back-dashboard">
+
+        ⬅️ العودة إلى لوحة التحكم
+
+    </a>
+
+
+</main>
+
+
+<script>
+
+async function loadTeachers() {
+
+    try {
+
+        const response =
+            await fetch("/api/admin/teachers");
+
+        const teachers =
+            await response.json();
+
+        const container =
+            document.getElementById("teachersList");
+
+        const count =
+            document.getElementById("teachersCount");
+
+
+        if (!response.ok) {
+
+            container.innerHTML =
+                "<p>لا يمكن تحميل بيانات المعلمين.</p>";
+
+            return;
+
+        }
+
+
+        count.textContent = teachers.length;
+
+
+        if (teachers.length === 0) {
+
+            container.innerHTML = `
+                <p>
+                    لا يوجد معلمون مسجلون حاليًا.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML = teachers.map(teacher => `
+
+            <div class="teacher-card">
+
+                <div class="teacher-icon">
+                    👨‍🏫
+                </div>
+
+                <h3>
+                    ${teacher.fullName}
+                </h3>
+
+                <div class="teacher-info">
+
+    <div>
+        <strong>الهاتف:</strong>
+        ${teacher.phone || "-"}
+    </div>
+
+    <div>
+        <strong>السن:</strong>
+        ${teacher.age || "-"}
+    </div>
+
+    <div>
+        <strong>المؤهل / الكلية:</strong>
+        ${teacher.qualification || "-"}
+    </div>
+
+    <div>
+        <strong>التخصص:</strong>
+        ${teacher.specialization || "-"}
+    </div>
+
+    <div>
+        <strong>خبرة تحفيظ القرآن:</strong>
+        ${teacher.quran_experience !== null &&
+          teacher.quran_experience !== undefined
+            ? teacher.quran_experience + " سنة"
+            : "-"}
+    </div>
+
+    <div>
+        <strong>الإجازة / القراءة:</strong>
+        ${teacher.ijazah || "-"}
+    </div>
+
+    <div>
+        <strong>ملاحظات:</strong>
+        ${teacher.notes || "-"}
+    </div>
+
+</div>
+
+
+                <div class="teacher-actions">
+
+                    <button type="button"
+                            onclick="editTeacher(${teacher.id})">
+
+                        ✏️ تعديل
+
+                    </button>
+
+
+                    <button type="button"
+                            onclick="deleteTeacher(${teacher.id})">
+
+                        🗑️ حذف
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+
+    } catch (error) {
+
+        document.getElementById("teachersList").innerHTML =
+            "<p>حدث خطأ أثناء الاتصال بالسيرفر.</p>";
+
+        console.error(error);
+
+    }
+
+}
+
+
+function editTeacher(id) {
+
+    window.location.href =
+        `/admin/teachers/edit/${id}`;
+
+}
+
+
+async function deleteTeacher(id) {
+
+    const confirmed =
+        confirm("هل أنتِ متأكدة من حذف هذا المعلم؟");
+
+    if (!confirmed) {
+        return;
+    }
+
+    const response =
+        await fetch(`/admin/teachers/delete/${id}`, {
+            method: "POST"
+        });
+
+    if (response.ok) {
+
+        loadTeachers();
+
+    } else {
+
+        alert("حدث خطأ أثناء حذف المعلم.");
+
+    }
+
+}
+
+
+loadTeachers();
+
+</script>
+
+
+</body>
+
+</html>

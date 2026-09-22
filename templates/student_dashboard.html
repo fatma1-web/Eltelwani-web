@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>لوحة الطالب</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+
+        .student-dashboard {
+            width: 92%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding-bottom: 40px;
+        }
+
+        /* Header */
+
+        .student-header {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 22px;
+            padding: 35px 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #c9a227;
+        }
+
+        .student-header h1 {
+            margin: 0 0 12px;
+            font-size: 32px;
+        }
+
+        .student-header h2 {
+            margin: 8px 0;
+            font-size: 26px;
+        }
+
+        .student-header p {
+            margin: 8px 0 0;
+            opacity: 0.75;
+        }
+
+        /* Quick cards */
+
+        .student-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 18px;
+            padding: 22px 15px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        .summary-card .icon {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .summary-card h3 {
+            margin: 5px 0;
+            font-size: 17px;
+        }
+
+        .summary-card p {
+            margin: 8px 0 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Main sections */
+
+        .dashboard-section {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 22px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 7px 24px rgba(0, 0, 0, 0.07);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        /* Student information */
+
+        .student-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .info-item {
+            background: #f8f8f8;
+            border-radius: 12px;
+            padding: 15px 18px;
+        }
+
+        .info-item strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        /* Tables */
+
+        .student-table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            min-width: 650px;
+        }
+
+        .student-table th {
+            padding: 15px 10px;
+            border-bottom: 2px solid #c9a227;
+            white-space: nowrap;
+        }
+
+        .student-table td {
+            padding: 14px 10px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .student-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Empty message */
+
+        .empty-message {
+            text-align: center;
+            padding: 25px;
+            opacity: 0.7;
+        }
+
+        /* Logout */
+
+        .student-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .logout-button {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 800px) {
+
+            .student-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .student-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .student-dashboard {
+                width: 94%;
+                margin-top: 20px;
+            }
+
+            .student-header {
+                padding: 28px 15px;
+            }
+
+            .student-header h1 {
+                font-size: 26px;
+            }
+
+            .student-header h2 {
+                font-size: 22px;
+            }
+
+            .dashboard-section {
+                padding: 20px 15px;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+
+            .student-summary {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .summary-card {
+                padding: 16px 8px;
+            }
+
+            .summary-card .icon {
+                font-size: 25px;
+            }
+
+            .summary-card h3 {
+                font-size: 14px;
+            }
+
+            .summary-card p {
+                font-size: 14px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="student-dashboard">
+
+
+    <!-- Header -->
+
+    <div class="student-header">
+
+        <h1>📖 لوحة الطالب</h1>
+
+        <h2>
+            {{ student.fullName }}
+        </h2>
+
+        <p>
+            كود الطالب:
+            <strong>{{ student.student_code or "-" }}</strong>
+        </p>
+
+    </div>
+
+
+    <!-- Summary -->
+
+    <div class="student-summary">
+
+
+        <div class="summary-card">
+
+            <div class="icon">👨‍🏫</div>
+
+            <h3>المعلم</h3>
+
+            <p>
+                {{ student.teacher_name or "غير محدد" }}
+            </p>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="icon">📚</div>
+
+            <h3>الحلقة</h3>
+
+            <p>
+                {{ student.halaqa or "-" }}
+            </p>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="icon">📖</div>
+
+            <h3>المحفوظ</h3>
+
+            <p>
+                {{ student.memorized or "-" }}
+            </p>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="icon">📌</div>
+
+            <h3>المتبقي</h3>
+
+            <p>
+                {{ student.remaining or "-" }}
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- Student Information -->
+
+    <div class="dashboard-section">
+
+        <div class="section-title">
+
+            <span>👤</span>
+
+            <h2>بياناتي</h2>
+
+        </div>
+
+
+        <div class="student-info-grid">
+
+
+            <div class="info-item">
+
+                <strong>📞 رقم الهاتف</strong>
+
+                {{ student.phone or "-" }}
+
+            </div>
+
+
+            <div class="info-item">
+
+                <strong>📱 هاتف ولي الأمر</strong>
+
+                {{ student.parent_phone or "-" }}
+
+            </div>
+
+
+            <div class="info-item">
+
+                <strong>📊 المستوى</strong>
+
+                {{ student.level or "-" }}
+
+            </div>
+
+
+            <div class="info-item">
+
+                <strong>👨‍🏫 المعلم المسؤول</strong>
+
+                {{ student.teacher_name or "لم يتم التعيين" }}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- Attendance -->
+
+    <div class="dashboard-section">
+
+        <div class="section-title">
+
+            <span>📋</span>
+
+            <h2>سجل الحضور</h2>
+
+        </div>
+
+
+        {% if attendance_records %}
+
+        <div class="student-table-container">
+
+            <table class="student-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>التاريخ</th>
+
+                        <th>الحالة</th>
+
+                        <th>ملاحظات</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for record in attendance_records %}
+
+                    <tr>
+
+                        <td>
+                            {{ record.attendance_date }}
+                        </td>
+
+
+                        <td>
+
+                            {% if record.status == "present" %}
+
+                                ✅ حاضر
+
+                            {% elif record.status == "absent" %}
+
+                                ❌ غائب
+
+                            {% elif record.status == "excused" %}
+
+                                ⚠️ بعذر
+
+                            {% else %}
+
+                                {{ record.status }}
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ record.notes or "-" }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-message">
+
+            لا يوجد سجل حضور حتى الآن.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Tasmee3 -->
+
+    <div class="dashboard-section">
+
+        <div class="section-title">
+
+            <span>📖</span>
+
+            <h2>سجل التسميع</h2>
+
+        </div>
+
+
+        {% if tasmee3_records %}
+
+        <div class="student-table-container">
+
+            <table class="student-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>التاريخ</th>
+
+                        <th>السورة</th>
+
+                        <th>من</th>
+
+                        <th>إلى</th>
+
+                        <th>النوع</th>
+
+                        <th>التقييم</th>
+
+                        <th>ملاحظات</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for record in tasmee3_records %}
+
+                    <tr>
+
+                        <td>
+                            {{ record.date }}
+                        </td>
+
+                        <td>
+                            {{ record.surah }}
+                        </td>
+
+                        <td>
+                            {{ record.from_ayah or "-" }}
+                        </td>
+
+                        <td>
+                            {{ record.to_ayah or "-" }}
+                        </td>
+
+                        <td>
+                            {{ record.type or "-" }}
+                        </td>
+
+                        <td>
+                            {{ record.evaluation or "-" }}
+                        </td>
+
+                        <td>
+                            {{ record.notes or "-" }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-message">
+
+            لا يوجد تسميع مسجل حتى الآن.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Logout -->
+
+    <div class="student-actions">
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="logout-button"
+        >
+            🚪 تسجيل الخروج
+        </a>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>
+

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>إضافة طالب - دار التلوانى</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<main class="qa-container">
+
+    <h2>➕ إضافة طالب جديد</h2>
+
+    <p>
+        أدخل بيانات الطالب لإنشاء حساب له.
+    </p>
+
+    <hr>
+
+
+    <form method="POST">
+
+    <label>
+        اسم الطالب
+    </label>
+
+    <input
+        type="text"
+        name="fullName"
+        placeholder="اسم الطالب"
+        required>
+
+
+    <br><br>
+
+
+    <label>
+        كود الطالب
+    </label>
+
+    <input
+        type="text"
+        name="student_code"
+        placeholder="مثال: ST001"
+        required>
+
+
+    <br><br>
+
+
+    <label>
+        رقم الهاتف
+    </label>
+
+    <input
+    type="tel"
+    name="phone"
+    pattern="01[0-9]{9}"
+    maxlength="11"
+    minlength="11"
+    inputmode="numeric"
+    required
+>
+
+
+    <br><br>
+
+
+    <label>
+        رقم ولي الأمر
+    </label>
+
+    <input
+    type="tel"
+    name="parent_phone"
+    pattern="01[0-9]{9}"
+    maxlength="11"
+    minlength="11"
+    inputmode="numeric"
+    required
+>
+
+
+    <br><br>
+
+
+    <label>
+        الحلقة
+    </label>
+
+    <input
+        type="text"
+        name="halaqa"
+        placeholder="مثال: حلقة الفجر">
+
+
+    <br><br>
+
+
+<label>المعلم المسؤول</label>
+
+<select name="teacher_id">
+
+    <option value="">
+        -- اختر المعلم --
+    </option>
+
+    {% for teacher in teachers %}
+
+        <option value="{{ teacher.id }}">
+            {{ teacher.fullName }}
+        </option>
+
+    {% endfor %}
+
+</select>
+
+<br><br>
+
+
+    <label>
+        المستوى
+    </label>
+
+    <input
+        type="text"
+        name="level"
+        placeholder="مثال: مبتدئ">
+
+
+    <br><br>
+
+
+    <label>
+        مقدار الحفظ
+    </label>
+
+    <input
+        type="text"
+        name="memorized"
+        placeholder="مثال: 3 أجزاء">
+
+
+    <br><br>
+
+
+    <label>
+        المتبقي للختم
+    </label>
+
+    <input
+        type="text"
+        name="remaining"
+        placeholder="مثال: 27 جزء">
+
+
+    <br><br>
+
+
+    <label>
+        كلمة المرور
+    </label>
+
+    <input
+        type="password"
+        name="password"
+        placeholder="كلمة المرور"
+        required>
+
+
+    <br><br>
+
+
+    <button type="submit">
+        💾 حفظ الطالب
+    </button>
+
+</form>
+
+
+    <br>
+
+
+    <a href="{{ url_for('admin_students') }}"
+       class="back-btn">
+
+        ⬅️ العودة إلى الطلاب
+
+    </a>
+
+
+</main>
+
+
+</body>
+
+</html>

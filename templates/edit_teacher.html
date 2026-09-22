@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>تعديل معلم - دار التلوانى</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<main class="qa-container">
+
+    <h2>✏️ تعديل بيانات المعلم</h2>
+
+    <p>
+        تعديل بيانات المعلم:
+        <strong>{{ teacher.fullName }}</strong>
+    </p>
+
+    <hr>
+
+    <form method="POST">
+
+        <label>اسم المعلم</label>
+
+        <input
+            type="text"
+            name="fullName"
+            value="{{ teacher.fullName }}"
+            required
+        >
+
+        <br><br>
+
+
+        <label>رقم الهاتف</label>
+
+        <input
+            type="tel"
+            name="phone"
+            pattern="01[0-9]{9}"
+            maxlength="11"
+            minlength="11"
+            inputmode="numeric"
+            value="{{ teacher.phone }}"
+            required
+        >
+
+        <br><br>
+
+
+        <label>السن</label>
+
+        <input
+            type="number"
+            name="age"
+            value="{{ teacher.age or '' }}"
+            min="18"
+        >
+
+        <br><br>
+
+
+        <label>المؤهل الدراسي / الكلية</label>
+
+        <input
+            type="text"
+            name="qualification"
+            value="{{ teacher.qualification or '' }}"
+        >
+
+        <br><br>
+
+
+        <label>التخصص</label>
+
+        <input
+            type="text"
+            name="specialization"
+            value="{{ teacher.specialization or '' }}"
+        >
+
+        <br><br>
+
+
+        <label>مدة الخبرة في تحفيظ القرآن</label>
+
+        <input
+            type="number"
+            name="quran_experience"
+            value="{{ teacher.quran_experience or '' }}"
+            min="0"
+        >
+
+        <br><br>
+
+
+        <label>الإجازة / القراءة</label>
+
+        <input
+            type="text"
+            name="ijazah"
+            value="{{ teacher.ijazah or '' }}"
+        >
+
+        <br><br>
+
+
+        <label>ملاحظات</label>
+
+        <textarea
+            name="notes"
+            rows="4"
+        >{{ teacher.notes or '' }}</textarea>
+
+        <br><br>
+
+
+        <label>كلمة المرور</label>
+
+        <input
+            type="password"
+            name="password"
+            value="{{ teacher.password }}"
+            required
+        >
+
+        <br><br>
+
+
+        <button type="submit">
+            💾 حفظ التعديلات
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('admin_teachers') }}"
+       class="back-btn">
+
+        ⬅️ العودة إلى المعلمين
+
+    </a>
+
+</main>
+
+</body>
+
+</html>

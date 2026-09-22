@@ -58,7 +58,6 @@
 </header>
 
 <main>
-
     <section>
 
         <h2>التسجيل في دار التلوانى لتحفيظ القرآن الكريم</h2>
@@ -108,19 +107,31 @@
 
         <label>رقم الهاتف</label>
 
-        <input type="tel"
-               name="phone"
-               placeholder="رجاء ادخل رقم الواتساب"
-               required>
+        <input
+    type="tel"
+    name="phone"
+    id="phone"
+    placeholder="01xxxxxxxxx"
+    pattern="01[0-9]{9}"
+    maxlength="11"
+    minlength="11"
+    required
+>
 
         <br>
 
         <label>رقم ولي الأمر</label>
 
-        <input type="tel"
-               name="parent_phone"
-               placeholder="رجاء ادخل رقم ولي الأمر"
-               required>
+        <input
+    type="tel"
+    name="parent_phone"
+    id="parent_phone"
+    placeholder="01xxxxxxxxx"
+    pattern="01[0-9]{9}"
+    maxlength="11"
+    minlength="11"
+    required
+>
 
         <br>
 

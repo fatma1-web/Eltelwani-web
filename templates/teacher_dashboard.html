@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>لوحة تحكم المعلم - دار التلوانى</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .teacher-dashboard {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 25px;
+        }
+
+
+        /* =========================
+           Header
+        ========================= */
+
+        .teacher-header {
+            margin-bottom: 30px;
+        }
+
+        .teacher-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .teacher-header p {
+            opacity: 0.8;
+            margin: 6px 0;
+        }
+
+
+        /* =========================
+           Students Count
+        ========================= */
+
+        .students-count {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(201, 162, 39, 0.4);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+        }
+
+        .students-count span {
+            font-size: 28px;
+            font-weight: bold;
+            color: #c9a227;
+        }
+
+
+        /* =========================
+           Students Grid
+        ========================= */
+
+        .students-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(300px, 1fr));
+
+            gap: 20px;
+        }
+
+
+        /* =========================
+           Student Card
+        ========================= */
+
+        .student-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(201, 162, 39, 0.35);
+            border-radius: 16px;
+            padding: 22px;
+            transition: 0.3s;
+        }
+
+        .student-card:hover {
+            transform: translateY(-4px);
+            border-color: #c9a227;
+        }
+
+
+        .student-icon {
+            width: 55px;
+            height: 55px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: rgba(201, 162, 39, 0.15);
+
+            font-size: 25px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .student-card h3 {
+            margin: 0 0 15px;
+            font-size: 21px;
+        }
+
+
+        /* =========================
+           Student Info
+        ========================= */
+
+        .student-info {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .student-info strong {
+            color: #c9a227;
+        }
+
+
+        /* =========================
+           Attendance
+        ========================= */
+
+        .attendance-section {
+            margin-top: 20px;
+            padding-top: 18px;
+
+            border-top: 1px solid
+                rgba(201, 162, 39, 0.25);
+        }
+
+        .attendance-section p {
+            margin-bottom: 12px;
+        }
+
+        .attendance-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .attendance-buttons button {
+            flex: 1;
+
+            padding: 10px;
+
+            border: none;
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           Logout
+        ========================= */
+
+        .logout-btn {
+            display: inline-block;
+
+            margin-top: 30px;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+        }
+
+
+        /* =========================
+           Mobile
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .teacher-dashboard {
+                margin: 20px auto;
+                padding: 15px;
+            }
+
+            .students-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<main class="teacher-dashboard">
+
+
+    <!-- =========================
+         Header
+    ========================= -->
+
+    <div class="teacher-header">
+
+        <h1>
+            👨‍🏫 لوحة تحكم المعلم
+        </h1>
+
+        <p>
+            مرحبًا {{ session["fullName"] }}
+        </p>
+
+        <p>
+            الطلاب المسؤول عنهم
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         Students Count
+    ========================= -->
+
+    <div class="students-count">
+
+        <span>
+            {{ students|length }}
+        </span>
+
+        طالب مسجل معك
+
+    </div>
+
+
+    <!-- =========================
+         Students
+    ========================= -->
+
+    {% if students %}
+
+        <div class="students-grid">
+
+            {% for student in students %}
+
+                <div class="student-card">
+
+
+                    <div class="student-icon">
+                        👨‍🎓
+                    </div>
+
+
+                    <h3>
+                        {{ student.fullName }}
+                    </h3>
+
+
+                    <!-- Student Information -->
+
+                    <div class="student-info">
+
+                        <div>
+                            <strong>كود الطالب:</strong>
+                            {{ student.student_code or "-" }}
+                        </div>
+
+
+                        <div>
+                            <strong>الهاتف:</strong>
+                            {{ student.phone or "-" }}
+                        </div>
+
+
+                        <div>
+                            <strong>ولي الأمر:</strong>
+                            {{ student.parent_phone or "-" }}
+                        </div>
+
+
+                        <div>
+                            <strong>الحلقة:</strong>
+                            {{ student.halaqa or "-" }}
+                        </div>
+
+
+                        <div>
+                            <strong>المستوى:</strong>
+                            {{ student.level or "-" }}
+                        </div>
+
+
+                        <div>
+                            <strong>المحفوظ:</strong>
+                            {{ student.memorized or "-" }}
+                        </div>
+
+
+                        <div>
+                            <strong>المتبقي:</strong>
+                            {{ student.remaining or "-" }}
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================
+                         Attendance
+                    ========================= -->
+
+                    
+<div class="attendance-section">
+
+    <p>
+        <strong>📋 حضور اليوم:</strong>
+
+        {% if student.attendance_status == "present" %}
+
+            <span>✅ حاضر</span>
+
+        {% elif student.attendance_status == "absent" %}
+
+            <span>❌ غائب</span>
+
+        {% else %}
+
+            <span>⏳ لم يتم التسجيل</span>
+
+        {% endif %}
+    </p>
+
+    <div class="attendance-buttons">
+
+        <button
+            type="button"
+            onclick="setAttendance({{ student.id }}, 'present')">
+            ✅ حاضر
+        </button>
+
+        <button
+            type="button"
+            onclick="setAttendance({{ student.id }}, 'absent')">
+            ❌ غائب
+        </button>
+
+    </div>
+
+</div>
+
+
+<a
+    href="{{ url_for('student_attendance', student_id=student.id) }}"
+    class="attendance-history-button">
+    📋 سجل الحضور
+</a>
+
+<a
+        href="{{ url_for('student_tasmee3', student_id=student.id) }}"
+        class="attendance-history-button">
+        📖 تسجيل التسميع
+    </a>
+    <a
+    href="{{ url_for('tasmee3_history', student_id=student.id) }}"
+    class="attendance-history-button">
+    📚 سجل التسميع
+</a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+        <p>
+            لا يوجد طلاب معينون لك حاليًا.
+        </p>
+
+    {% endif %}
+
+
+    <!-- =========================
+         Logout
+    ========================= -->
+
+    <a href="{{ url_for('logout') }}"
+       class="logout-btn">
+
+        🚪 تسجيل الخروج
+
+    </a>
+
+
+</main>
+
+
+<script>
+async function setAttendance(studentId, status) {
+
+    try {
+
+        const response = await fetch("/teacher/attendance", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                student_id: studentId,
+                status: status
+            })
+        });
+
+        const text = await response.text();
+
+        console.log("Server response:", text);
+
+        if (response.ok) {
+            alert("تم تسجيل الحضور بنجاح ✅");
+        } else {
+            alert("حدث خطأ في السيرفر:\n" + text);
+        }
+
+    } catch (error) {
+
+        console.error("Fetch error:", error);
+
+        alert("تعذر الاتصال بالسيرفر");
+    }
+}
+</script>
+
+
+
+
+</body>
+
+</html>
+

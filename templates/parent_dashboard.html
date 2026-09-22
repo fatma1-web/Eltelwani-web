@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>لوحة ولي الأمر</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+
+        .parent-dashboard {
+            width: 92%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding-bottom: 40px;
+        }
+
+        .parent-header {
+            background: rgba(255,255,255,0.96);
+            border-radius: 22px;
+            padding: 35px 25px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-top: 4px solid #c9a227;
+        }
+
+        .parent-header h1 {
+            margin: 0 0 12px;
+            font-size: 32px;
+        }
+
+        .parent-header h2 {
+            margin: 8px 0;
+            font-size: 25px;
+        }
+
+        .parent-header p {
+            margin-top: 10px;
+            opacity: 0.75;
+        }
+
+        .child-card {
+            background: rgba(255,255,255,0.96);
+            border-radius: 22px;
+            padding: 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 7px 24px rgba(0,0,0,0.07);
+        }
+
+        .child-header {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 18px;
+            margin-bottom: 22px;
+        }
+
+        .child-header h2 {
+            margin: 0 0 8px;
+        }
+
+        .child-header p {
+            margin: 0;
+            opacity: 0.7;
+        }
+
+        .child-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-item {
+            background: #f8f8f8;
+            border-radius: 14px;
+            padding: 17px 10px;
+            text-align: center;
+        }
+
+        .summary-item strong {
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        .summary-item span {
+            font-weight: bold;
+        }
+
+        .parent-section {
+            margin-top: 25px;
+        }
+
+        .parent-section h3 {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+
+        .parent-table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .parent-table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .parent-table th {
+            padding: 13px 10px;
+            border-bottom: 2px solid #c9a227;
+        }
+
+        .parent-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 25px;
+            opacity: 0.7;
+        }
+
+        .logout-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .logout-button {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 800px) {
+
+            .parent-dashboard {
+                width: 94%;
+                margin-top: 20px;
+            }
+
+            .child-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .child-card {
+                padding: 20px 15px;
+            }
+
+            .parent-header h1 {
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="parent-dashboard">
+
+
+    <!-- Header -->
+
+    <div class="parent-header">
+
+        <h1>👨‍👩‍👧 لوحة ولي الأمر</h1>
+
+        <h2>
+            {{ parent.fullName }}
+        </h2>
+
+        <p>
+            رقم الهاتف:
+            {{ parent.phone }}
+        </p>
+
+    </div>
+
+
+    {% if children %}
+
+
+        {% for child in children %}
+
+        <div class="child-card">
+
+
+            <!-- بيانات الطالب -->
+
+            <div class="child-header">
+
+                <h2>
+                    📖 {{ child.fullName }}
+                </h2>
+
+                <p>
+                    كود الطالب:
+                    {{ child.student_code or "-" }}
+                </p>
+
+            </div>
+
+
+            <!-- ملخص -->
+
+            <div class="child-summary">
+
+                <div class="summary-item">
+
+                    <strong>👨‍🏫 المعلم</strong>
+
+                    <span>
+                        {{ child.teacher_name or "غير محدد" }}
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <strong>📚 الحلقة</strong>
+
+                    <span>
+                        {{ child.halaqa or "-" }}
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <strong>📖 المحفوظ</strong>
+
+                    <span>
+                        {{ child.memorized or "-" }}
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <strong>📌 المتبقي</strong>
+
+                    <span>
+                        {{ child.remaining or "-" }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- الحضور -->
+
+            <div class="parent-section">
+
+                <h3>📋 سجل الحضور</h3>
+
+
+                {% if child.attendance_records %}
+
+                <div class="parent-table-container">
+
+                    <table class="parent-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>الحالة</th>
+                                <th>ملاحظات</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for record in child.attendance_records %}
+
+                            <tr>
+
+                                <td>
+                                    {{ record.attendance_date }}
+                                </td>
+
+                                <td>
+
+                                    {% if record.status == "present" %}
+                                        ✅ حاضر
+
+                                    {% elif record.status == "absent" %}
+                                        ❌ غائب
+
+                                    {% elif record.status == "excused" %}
+                                        ⚠️ بعذر
+
+                                    {% else %}
+                                        {{ record.status }}
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+                                    {{ record.notes or "-" }}
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-message">
+                    لا يوجد سجل حضور حتى الآن.
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- التسميع -->
+
+            <div class="parent-section">
+
+                <h3>📖 سجل التسميع</h3>
+
+
+                {% if child.tasmee3_records %}
+
+                <div class="parent-table-container">
+
+                    <table class="parent-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>التاريخ</th>
+                                <th>السورة</th>
+                                <th>من</th>
+                                <th>إلى</th>
+                                <th>النوع</th>
+                                <th>التقييم</th>
+                                <th>ملاحظات</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for record in child.tasmee3_records %}
+
+                            <tr>
+
+                                <td>
+                                    {{ record.date }}
+                                </td>
+
+                                <td>
+                                    {{ record.surah }}
+                                </td>
+
+                                <td>
+                                    {{ record.from_ayah or "-" }}
+                                </td>
+
+                                <td>
+                                    {{ record.to_ayah or "-" }}
+                                </td>
+
+                                <td>
+                                    {{ record.type or "-" }}
+                                </td>
+
+                                <td>
+                                    {{ record.evaluation or "-" }}
+                                </td>
+
+                                <td>
+                                    {{ record.notes or "-" }}
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-message">
+                    لا يوجد تسميع مسجل حتى الآن.
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <div class="child-card">
+
+            <div class="empty-message">
+
+                لا يوجد طلاب مرتبطون بحساب ولي الأمر حتى الآن.
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- Logout -->
+
+    <div class="logout-container">
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="logout-button"
+        >
+            🚪 تسجيل الخروج
+        </a>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>
+

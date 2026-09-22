@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>تسجيل التسميع</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="attendance-page">
+
+        <div class="page-header">
+
+            <h1>📖 تسجيل التسميع</h1>
+
+            <h2>
+                {{ student.fullName }}
+            </h2>
+
+            <p>
+                كود الطالب:
+                {{ student.student_code or "-" }}
+            </p>
+
+        </div>
+
+
+        <div class="form-container">
+
+            <form id="tasmee3Form">
+
+                <input
+                    type="hidden"
+                    id="student_id"
+                    value="{{ student.id }}"
+                >
+
+
+                <label>
+                    السورة
+                </label>
+
+                <input
+                    type="text"
+                    id="surah"
+                    placeholder="مثال: البقرة"
+                    required
+                >
+
+
+                <label>
+                    من آية
+                </label>
+
+                <input
+                    type="number"
+                    id="from_ayah"
+                    min="1"
+                    placeholder="مثال: 1"
+                >
+
+
+                <label>
+                    إلى آية
+                </label>
+
+                <input
+                    type="number"
+                    id="to_ayah"
+                    min="1"
+                    placeholder="مثال: 20"
+                >
+
+
+                <label>
+                    نوع التسميع
+                </label>
+
+                <select id="tasmee3_type">
+
+                    <option value="">
+                        -- اختر النوع --
+                    </option>
+
+                    <option value="جديد">
+                        جديد
+                    </option>
+
+                    <option value="مراجعة">
+                        مراجعة
+                    </option>
+
+                </select>
+
+
+                <label>
+                    التقييم
+                </label>
+
+                <select id="evaluation">
+
+                    <option value="">
+                        -- اختر التقييم --
+                    </option>
+
+                    <option value="ممتاز">
+                        ممتاز
+                    </option>
+
+                    <option value="جيد جدًا">
+                        جيد جدًا
+                    </option>
+
+                    <option value="جيد">
+                        جيد
+                    </option>
+
+                    <option value="يحتاج مراجعة">
+                        يحتاج مراجعة
+                    </option>
+
+                </select>
+
+
+                <label>
+                    ملاحظات
+                </label>
+
+                <textarea
+                    id="notes"
+                    rows="4"
+                    placeholder="اكتب ملاحظات المعلم هنا..."
+                ></textarea>
+
+
+                <button type="submit">
+                    💾 تسجيل التسميع
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <div class="back-button">
+
+            <a href="{{ url_for('teacher_dashboard') }}">
+                ← العودة إلى لوحة المعلم
+            </a>
+
+        </div>
+
+    </div>
+
+
+<script>
+
+document
+.getElementById("tasmee3Form")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+
+    const studentId =
+        document.getElementById("student_id").value;
+
+    const surah =
+        document.getElementById("surah").value;
+
+    const fromAyah =
+        document.getElementById("from_ayah").value;
+
+    const toAyah =
+        document.getElementById("to_ayah").value;
+
+    const type =
+        document.getElementById("tasmee3_type").value;
+
+    const evaluation =
+        document.getElementById("evaluation").value;
+
+    const notes =
+        document.getElementById("notes").value;
+
+
+    try {
+
+        const response = await fetch(
+            "/teacher/tasmee3",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    student_id: studentId,
+
+                    surah: surah,
+
+                    from_ayah: fromAyah,
+
+                    to_ayah: toAyah,
+
+                    type: type,
+
+                    evaluation: evaluation,
+
+                    notes: notes
+
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (response.ok) {
+
+            alert(
+                "تم تسجيل التسميع بنجاح ✅"
+            );
+
+            document
+            .getElementById("tasmee3Form")
+            .reset();
+
+        } else {
+
+            alert(
+                data.message ||
+                "حدث خطأ أثناء تسجيل التسميع"
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "تعذر الاتصال بالسيرفر"
+        );
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

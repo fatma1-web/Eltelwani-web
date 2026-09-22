@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>سجل التسميع</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="attendance-page">
+
+        <div class="page-header">
+
+            <h1>📖 سجل التسميع</h1>
+
+            <h2>
+                {{ student.fullName }}
+            </h2>
+
+            <p>
+                كود الطالب:
+                {{ student.student_code or "-" }}
+            </p>
+
+        </div>
+
+
+        <div class="attendance-table-container">
+
+            {% if tasmee3_records %}
+
+            <table class="attendance-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>التاريخ</th>
+
+                        <th>السورة</th>
+
+                        <th>من آية</th>
+
+                        <th>إلى آية</th>
+
+                        <th>النوع</th>
+
+                        <th>التقييم</th>
+
+                        <th>الملاحظات</th>
+
+                        <th>الإجراءات</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for record in tasmee3_records %}
+
+                    <tr>
+
+                        <td>
+                            {{ record.date }}
+                        </td>
+
+                        <td>
+                            {{ record.surah }}
+                        </td>
+
+                        <td>
+                            {{ record.from_ayah or "-" }}
+                        </td>
+
+                        <td>
+                            {{ record.to_ayah or "-" }}
+                        </td>
+
+                        <td>
+                            {{ record.type or "-" }}
+                        </td>
+
+                        <td>
+                            {{ record.evaluation or "-" }}
+                        </td>
+
+                        <td>
+                            {{ record.notes or "-" }}
+                        </td>
+
+                        <td>
+
+    <a
+        href="{{ url_for(
+            'edit_tasmee3',
+            tasmee3_id=record.id
+        ) }}"
+        class="attendance-history-button">
+        ✏️ تعديل
+    </a>
+
+    <form
+        method="POST"
+        action="{{ url_for(
+            'delete_tasmee3',
+            tasmee3_id=record.id
+        ) }}"
+        style="display:inline;"
+        onsubmit="return confirm('هل أنت متأكد من حذف هذا التسجيل؟');"
+    >
+
+        <button type="submit">
+            🗑️ حذف
+        </button>
+
+    </form>
+
+</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <p style="text-align:center;">
+                لا يوجد تسميع مسجل لهذا الطالب حتى الآن.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="back-button">
+
+            <a href="{{ url_for('teacher_dashboard') }}">
+                ← العودة إلى لوحة المعلم
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
+

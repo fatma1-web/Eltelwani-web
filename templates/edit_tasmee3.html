@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>تعديل التسميع</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="attendance-page">
+
+        <div class="page-header">
+
+            <h1>✏️ تعديل التسميع</h1>
+
+        </div>
+
+
+        <div class="form-container">
+
+            <form method="POST">
+
+                <input
+                    type="hidden"
+                    name="student_id"
+                    value="{{ record.student_id }}"
+                >
+
+
+                <label>
+                    السورة
+                </label>
+
+                <input
+                    type="text"
+                    name="surah"
+                    value="{{ record.surah }}"
+                    required
+                >
+
+
+                <label>
+                    من آية
+                </label>
+
+                <input
+                    type="number"
+                    name="from_ayah"
+                    min="1"
+                    value="{{ record.from_ayah or '' }}"
+                >
+
+
+                <label>
+                    إلى آية
+                </label>
+
+                <input
+                    type="number"
+                    name="to_ayah"
+                    min="1"
+                    value="{{ record.to_ayah or '' }}"
+                >
+
+
+                <label>
+                    نوع التسميع
+                </label>
+
+                <select name="type">
+
+                    <option value="">
+                        -- اختر النوع --
+                    </option>
+
+                    <option
+                        value="جديد"
+                        {% if record.type == "جديد" %}
+                            selected
+                        {% endif %}
+                    >
+                        جديد
+                    </option>
+
+                    <option
+                        value="مراجعة"
+                        {% if record.type == "مراجعة" %}
+                            selected
+                        {% endif %}
+                    >
+                        مراجعة
+                    </option>
+
+                </select>
+
+
+                <label>
+                    التقييم
+                </label>
+
+                <select name="evaluation">
+
+                    <option value="">
+                        -- اختر التقييم --
+                    </option>
+
+                    <option
+                        value="ممتاز"
+                        {% if record.evaluation == "ممتاز" %}
+                            selected
+                        {% endif %}
+                    >
+                        ممتاز
+                    </option>
+
+                    <option
+                        value="جيد جدًا"
+                        {% if record.evaluation == "جيد جدًا" %}
+                            selected
+                        {% endif %}
+                    >
+                        جيد جدًا
+                    </option>
+
+                    <option
+                        value="جيد"
+                        {% if record.evaluation == "جيد" %}
+                            selected
+                        {% endif %}
+                    >
+                        جيد
+                    </option>
+
+                    <option
+                        value="يحتاج مراجعة"
+                        {% if record.evaluation == "يحتاج مراجعة" %}
+                            selected
+                        {% endif %}
+                    >
+                        يحتاج مراجعة
+                    </option>
+
+                </select>
+
+
+                <label>
+                    ملاحظات
+                </label>
+
+                <textarea
+                    name="notes"
+                    rows="4"
+                    placeholder="ملاحظات المعلم..."
+                >{{ record.notes or '' }}</textarea>
+
+
+                <button type="submit">
+                    💾 حفظ التعديلات
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <div class="back-button">
+
+            <a
+                href="{{ url_for(
+                    'tasmee3_history',
+                    student_id=record.student_id
+                ) }}"
+            >
+                ← العودة إلى سجل التسميع
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

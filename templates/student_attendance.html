@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>سجل حضور الطالب</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="attendance-page">
+
+        <div class="page-header">
+
+            <h1>📋 سجل حضور الطالب</h1>
+
+            <h2>
+                {{ student.fullName }}
+            </h2>
+
+            <p>
+                كود الطالب:
+                {{ student.student_code or "-" }}
+            </p>
+
+        </div>
+
+
+        <div class="attendance-table-container">
+
+            {% if attendance_records %}
+
+            <table class="attendance-table">
+
+                <thead>
+
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>الحالة</th>
+                        <th>ملاحظات</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for record in attendance_records %}
+
+                    <tr>
+
+                        <td>
+                            {{ record.attendance_date }}
+                        </td>
+
+                        <td>
+
+                            {% if record.status == "present" %}
+
+                                <span>
+                                    ✅ حاضر
+                                </span>
+
+                            {% elif record.status == "absent" %}
+
+                                <span>
+                                    ❌ غائب
+                                </span>
+
+                            {% elif record.status == "excused" %}
+
+                                <span>
+                                    🟡 غياب بعذر
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ record.notes or "-" }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <p>
+                        لا يوجد سجل حضور لهذا الطالب حتى الآن.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="back-button">
+
+            <a href="{{ url_for('teacher_dashboard') }}">
+                ← العودة إلى لوحة المعلم
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

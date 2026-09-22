@@ -902,3 +902,135 @@ width:100%;
    .admin-btn:hover {
        background-color: #1b5e20;
    }
+
+.attendance-history-button {
+    display: block;
+    margin-top: 12px;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.attendance-table-container {
+    margin-top: 25px;
+    overflow-x: auto;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 30px;
+}
+
+.back-button {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.back-button a {
+    text-decoration: none;
+}
+
+/* =========================
+   Student Attendance Page
+   ========================= */
+
+.attendance-page {
+    width: 90%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.attendance-page .page-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.attendance-page .page-header h1 {
+    margin-bottom: 20px;
+}
+
+.attendance-page .page-header h2 {
+    margin: 10px 0;
+    font-size: 28px;
+}
+
+.attendance-page .page-header p {
+    margin-top: 10px;
+}
+
+.attendance-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 25px;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.back-button {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.back-button a {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+
+    .attendance-page {
+        width: 94%;
+        padding: 15px;
+        margin: 20px auto;
+    }
+
+    .attendance-page .page-header {
+        padding: 20px 10px;
+    }
+
+    .attendance-page .page-header h1 {
+        font-size: 23px;
+    }
+
+    .attendance-page .page-header h2 {
+        font-size: 22px;
+    }
+
+    .attendance-table th,
+    .attendance-table td {
+        padding: 10px 8px;
+        font-size: 14px;
+    }
+}
+
+
+

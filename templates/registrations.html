@@ -1,14 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
 
     <title>استمارات التسجيل</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 
 <body>
@@ -22,6 +23,7 @@
 
     </div>
 
+
     <main class="qa-container">
 
         <h2>📋 استمارات التسجيل</h2>
@@ -32,11 +34,15 @@
 
         <hr>
 
+
         <div id="registrationsContainer">
+
             جاري تحميل الاستمارات...
+
         </div>
 
     </main>
+
 
 
     <script>
@@ -64,12 +70,76 @@
         }
 
 
+
+        function approveRegistration(id) {
+
+            const confirmed = confirm(
+                "هل تريد اعتماد هذا الطالب وإنشاء حساب الطالب وولي الأمر؟"
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            fetch(
+                `/admin/registrations/approve/${id}`,
+                {
+                    method: "POST"
+                }
+            )
+
+            .then(function(response) {
+
+                return response.json();
+
+            })
+
+            .then(function(data) {
+
+                if (data.message) {
+
+                    alert(data.message);
+
+                }
+
+                if (data.student_code) {
+
+                    alert(
+                        "كود الطالب: " +
+                        data.student_code +
+                        "\n" +
+                        "كلمة مرور الطالب: 123\n" +
+                        "كلمة مرور ولي الأمر: 123"
+                    );
+
+                }
+
+                loadRegistrations();
+
+            })
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                alert(
+                    "حدث خطأ أثناء اعتماد الطالب."
+                );
+
+            });
+
+        }
+
+
+
         function loadRegistrations() {
 
             const container =
                 document.getElementById(
                     "registrationsContainer"
                 );
+
 
             container.innerHTML =
                 "جاري تحميل الاستمارات...";
@@ -117,6 +187,7 @@
                     }
 
 
+
                     data.forEach(function(registration) {
 
                         const card =
@@ -126,73 +197,217 @@
                             "admin-card";
 
 
+                        let statusHTML = "";
+
+
+                        if (
+                            registration.status ===
+                            "approved"
+                        ) {
+
+                            statusHTML = `
+
+                                <p style="
+                                    color:green;
+                                    font-weight:bold;
+                                ">
+
+                                    ✅ تم اعتماد الطالب
+
+                                    ${
+                                        registration.student_code
+                                        ? " - كود الطالب: " +
+                                          registration.student_code
+                                        : ""
+                                    }
+
+                                </p>
+
+                            `;
+
+                        }
+
+                        else {
+
+                            statusHTML = `
+
+                                <p style="
+                                    color:#c88a00;
+                                    font-weight:bold;
+                                ">
+
+                                    ⏳ في انتظار الاعتماد
+
+                                </p>
+
+
+                                <button
+                                    onclick="
+                                        approveRegistration(
+                                            ${registration.id}
+                                        )
+                                    "
+                                    style="
+                                        margin-top:15px;
+                                        padding:10px 20px;
+                                        border:none;
+                                        border-radius:8px;
+                                        cursor:pointer;
+                                        font-weight:bold;
+                                    "
+                                >
+
+                                    ✅ اعتماد الطالب
+
+                                </button>
+
+                            `;
+
+                        }
+
+
+
                         card.innerHTML = `
 
                             <h3>
                                 👤 ${registration.fullName}
                             </h3>
 
+
                             <p>
-                                <strong>رقم التسجيل:</strong>
+
+                                <strong>
+                                    رقم التسجيل:
+                                </strong>
+
                                 ${registration.id}
+
                             </p>
 
+
                             <p>
-                                <strong>العمر:</strong>
+
+                                <strong>
+                                    العمر:
+                                </strong>
+
                                 ${registration.age || "-"}
+
                             </p>
 
+
                             <p>
-                                <strong>النوع:</strong>
+
+                                <strong>
+                                    النوع:
+                                </strong>
+
                                 ${registration.gender || "-"}
+
                             </p>
 
+
                             <p>
-                                <strong>الهاتف:</strong>
+
+                                <strong>
+                                    الهاتف:
+                                </strong>
+
                                 ${registration.phone || "-"}
+
                             </p>
 
+
                             <p>
-                                <strong>رقم ولى الأمر:</strong>
+
+                                <strong>
+                                    رقم ولي الأمر:
+                                </strong>
+
                                 ${registration.parent_phone || "-"}
+
                             </p>
 
+
                             <p>
-                                <strong>الكورس:</strong>
+
+                                <strong>
+                                    الكورس:
+                                </strong>
+
                                 ${registration.course || "-"}
+
                             </p>
 
+
                             <p>
-                                <strong>طريقة الدراسة:</strong>
+
+                                <strong>
+                                    طريقة الدراسة:
+                                </strong>
+
                                 ${registration.way || "-"}
+
                             </p>
 
+
                             <p>
-                                <strong>الحلقة:</strong>
+
+                                <strong>
+                                    الحلقة:
+                                </strong>
+
                                 ${registration.halaqa || "-"}
+
                             </p>
 
+
                             <p>
-                                <strong>المستوى:</strong>
+
+                                <strong>
+                                    المستوى:
+                                </strong>
+
                                 ${registration.level || "-"}
+
                             </p>
 
+
                             <p>
-                                <strong>الأيام:</strong>
+
+                                <strong>
+                                    الأيام:
+                                </strong>
+
                                 ${registration.day || "-"}
+
                             </p>
 
+
                             <p>
-                                <strong>ملاحظات:</strong>
+
+                                <strong>
+                                    ملاحظات:
+                                </strong>
+
                                 ${registration.notes || "-"}
+
                             </p>
+
 
                             <hr>
 
+
                             <small>
+
                                 تاريخ التسجيل:
+
                                 ${registration.created_at || "-"}
+
                             </small>
+
+
+                            ${statusHTML}
 
                         `;
 
@@ -203,9 +418,11 @@
 
                 })
 
+
                 .catch(function(error) {
 
                     console.error(error);
+
 
                     container.innerHTML = `
 
@@ -229,6 +446,7 @@
         }
 
 
+
         if (checkPassword()) {
 
             loadRegistrations();
@@ -240,4 +458,3 @@
 </body>
 
 </html>
-

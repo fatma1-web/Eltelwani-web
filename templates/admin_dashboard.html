@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>لوحة التحكم - دار التلوانى</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .dashboard-page {
+            max-width: 1150px;
+            margin: 45px auto;
+            padding: 25px;
+        }
+
+
+        /* Header */
+
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(201, 162, 39, 0.35);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 35px;
+        }
+
+        .dashboard-header h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+        }
+
+        .dashboard-header p {
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        .admin-name {
+            color: #c9a227;
+            font-weight: bold;
+        }
+
+
+        /* Section title */
+
+        .dashboard-section-title {
+            margin-bottom: 20px;
+        }
+
+        .dashboard-section-title h2 {
+            margin: 0 0 7px;
+        }
+
+        .dashboard-section-title p {
+            margin: 0;
+            opacity: 0.75;
+        }
+
+
+        /* Cards */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(220px, 1fr)
+            );
+
+            gap: 20px;
+        }
+
+
+        .dashboard-card {
+            display: block;
+
+            text-decoration: none;
+            color: inherit;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            border: 1px solid rgba(201, 162, 39, 0.3);
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            min-height: 150px;
+
+            transition: 0.3s;
+        }
+
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+
+            border-color: #c9a227;
+
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+
+        .card-icon {
+            width: 55px;
+            height: 55px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background: rgba(201, 162, 39, 0.15);
+
+            font-size: 27px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .dashboard-card h3 {
+            margin: 0 0 8px;
+
+            font-size: 20px;
+        }
+
+
+        .dashboard-card p {
+            margin: 0;
+
+            opacity: 0.7;
+
+            font-size: 14px;
+        }
+
+
+        /* Coming soon cards */
+
+        .dashboard-card.disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+
+        .dashboard-card.disabled:hover {
+            transform: none;
+            border-color: rgba(201, 162, 39, 0.3);
+        }
+
+
+        /* Bottom buttons */
+
+        .dashboard-footer {
+            margin-top: 40px;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .dashboard-footer a {
+            text-decoration: none;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .dashboard-page {
+                margin: 20px auto;
+                padding: 15px;
+            }
+
+            .dashboard-header {
+                padding: 22px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<main class="dashboard-page">
+
+
+    <!-- Header -->
+
+    <section class="dashboard-header">
+
+        <h1>
+            👑 لوحة تحكم المدير
+        </h1>
+
+        <p>
+
+            أهلاً بك،
+            
+            <span class="admin-name">
+                {{ session["fullName"] }}
+            </span>
+
+            👋
+
+        </p>
+
+    </section>
+
+
+
+    <!-- Management -->
+
+    <section>
+
+        <div class="dashboard-section-title">
+
+            <h2>
+                إدارة الدار
+            </h2>
+
+            <p>
+                اختر القسم الذي تريد إدارته
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-grid">
+
+
+            <!-- Students -->
+
+            <a href="{{ url_for('admin_students') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    👨‍🎓
+                </div>
+
+                <h3>
+                    الطلاب
+                </h3>
+
+                <p>
+                    عرض وإدارة بيانات الطلاب
+                </p>
+
+            </a>
+
+
+
+            <!-- Teachers -->
+
+            <a href="{{ url_for('admin_teachers') }}"
+   class="dashboard-card">
+
+    <div class="card-icon">
+        👨‍🏫
+    </div>
+
+    <h3>إدارة المعلمين</h3>
+
+    <p>
+        إضافة وتعديل وحذف المعلمين
+    </p>
+
+</a>
+
+
+
+            <!-- Halaqat -->
+
+            <a href="{{ url_for('admin_halaqat') }}"
+   class="dashboard-card">
+
+    <div class="card-icon">
+        📚
+    </div>
+
+    <h3>
+        الحلقات
+    </h3>
+
+    <p>
+        إضافة وإدارة حلقات تحفيظ القرآن
+    </p>
+
+</a>
+
+
+
+            <!-- Attendance -->
+
+            <a href="{{ url_for('admin_attendance') }}"
+   class="dashboard-card">
+
+    <div class="card-icon">
+        📅
+    </div>
+
+    <h3>
+        الحضور والغياب
+    </h3>
+
+    <p>
+        متابعة حضور وغياب جميع الطلاب
+    </p>
+
+</a>
+
+
+
+            <!-- Tasmee3 -->
+
+            <a href="{{ url_for('admin_tasmee3') }}" class="dashboard-card">
+    <div class="card-icon">📖</div>
+    <h3>التسميع والمراجعة</h3>
+    <p>متابعة تسميع ومراجعة جميع الطلاب</p>
+</a>
+
+
+
+            <!-- Levels -->
+
+            <a href="{{ url_for('admin_levels') }}" class="dashboard-card">
+    <div class="card-icon">📊</div>
+    <h3>مستويات الطلاب</h3>
+    <p>متابعة مستوى وحفظ جميع الطلاب</p>
+</a>
+
+
+    
+
+    </section>
+
+
+
+    <!-- Footer -->
+
+    <div class="dashboard-footer">
+
+        <a href="{{ url_for('admin') }}"
+           class="admin-btn">
+
+            🛠️ الأسئلة والتسجيلات
+
+        </a>
+
+
+        <a href="{{ url_for('home') }}"
+           class="back-btn">
+
+            ⬅️ الصفحة الرئيسية
+
+        </a>
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>
